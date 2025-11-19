@@ -1,0 +1,1 @@
+M.course=M.course||{};M.course.format=M.course.format||{};M.course.format.get_config=function(){return{container_node:'ul',container_class:'flexsections',section_node:'li',section_class:'section'}}
