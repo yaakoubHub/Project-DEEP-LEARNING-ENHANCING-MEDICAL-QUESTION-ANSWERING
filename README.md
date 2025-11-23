@@ -105,7 +105,6 @@ docker build -t med-chat-api -f deployment/Dockerfile .
 
 ```
 docker run -p 8000:8000 `
-  -v ${PWD}/hf_cache:/data/huggingface `
   -v ${PWD}/my-qwen-model:/app/my-qwen-model `
   --name med-chat `
   med-chat-api
