@@ -1,0 +1,47 @@
+# Utilisation d'une image Python très légère (Debian Slim)
+FROM python:3.10-slim
+
+# Méta-données
+LABEL maintainer="VotreNom"
+LABEL description="API Qwen pour CPU (Windows Friendly)"
+
+# Répertoire de travail
+WORKDIR /app
+
+# Variables d'environnement
+# PYTHONDONTWRITEBYTECODE : évite les fichiers .pyc
+# PYTHONUNBUFFERED : assure que les logs s'affichent en temps réel
+# HF_HOME : définit où stocker le cache des modèles
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    HF_HOME=/data/huggingface
+
+# Installation des dépendances système minimales
+# git : nécessaire si peft/transformers doivent cloner des configs
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends git && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copie des requirements
+COPY requirements.txt .
+
+# --- OPTIMISATION MAJEURE ---
+# 1. On installe d'abord PyTorch en version CPU uniquement (index-url spécifique).
+#    Cela évite de télécharger les 2Go+ de librairies CUDA inutiles sur votre PC.
+RUN pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+# 2. On installe le reste des dépendances
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copie du code source
+COPY . .
+
+# Création du répertoire pour le cache (pour le montage de volume)
+RUN mkdir -p /data/huggingface
+
+# Exposition du port
+EXPOSE 8000
+
+# Commande de lancement
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
