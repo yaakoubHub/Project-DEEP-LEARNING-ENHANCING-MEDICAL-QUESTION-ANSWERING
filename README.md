@@ -99,16 +99,16 @@ limited setups.
 ### 3.1 Build Docker Image
 
 ```
-docker build -t med -chat -api -f deployment/Dockerfile.
+docker build -t med-chat-api -f deployment/Dockerfile .
 ```
 ### 3.2 Run the Docker Container
 
 ```
-docker run -p 8000:8000 \
--v${PWD}/ hf_cache :/data/huggingface \
--v${PWD}/my -qwen -model:/app/my -qwen -model \
---name med -chat \
-med -chat -api
+docker run -p 8000:8000 `
+  -v ${PWD}/hf_cache:/data/huggingface `
+  -v ${PWD}/my-qwen-model:/app/my-qwen-model `
+  --name med-chat `
+  med-chat-api
 ```
 ### 3.3 Access API
 
@@ -116,14 +116,14 @@ Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
 Sample API Test:
 
 ```
-curl-X ’POST’ \
-        ’http://localhost:8000/generate’ \
-        -H ’Content-Type:␣application/json’ \
-        -d ’{
- ␣␣"prompt":␣"What␣are␣the␣symptoms␣of␣diabetes?",
- ␣␣"max_new_tokens":␣100,
- ␣␣"temperature":␣0.7
- }’
+curl -X 'POST' \
+  'http://localhost:8000/generate' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "prompt": "What are the symptoms of diabetes?",
+  "max_new_tokens": 100,
+  "temperature": 0.7
+}'
 ```
 ## 4 Model Testing Instructions
 
@@ -163,5 +163,6 @@ Released under MIT License for academic and research use.
 ## Acknowledgements
 
 Hugging Face, Qwen (Alibaba), MedQuAD, NIH, and MedlinePlus.
+
 
 
