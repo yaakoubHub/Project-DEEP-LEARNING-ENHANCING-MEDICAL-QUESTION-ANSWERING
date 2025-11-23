@@ -24,7 +24,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copie des requirements
-COPY requirements.txt .
+COPY Deployment/requirements.txt
 
 # --- OPTIMISATION MAJEURE ---
 # 1. On installe d'abord PyTorch en version CPU uniquement (index-url spécifique).
